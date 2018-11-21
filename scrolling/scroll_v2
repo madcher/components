@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+       <meta charset="UTF-8">
+       <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+       <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+       <script src="data.js"></script>
+       <link rel="stylesheet" href="css/style.css" type="text/css">
+  </head>
+  <body>
+
+    <div id="container">
+
+    </div>
+
+
+  <script type="text/babel">
+
+
+// main table
+class MainTable extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {data:  [], showndata: [], tableHeight: 0};
+        this.scroll = this.scroll.bind(this);
+    } 
+
+    componentWillMount() {
+      // mark our data 
+      this.props.fulldata.forEach(function(element, i) {
+        element.name = element.name+" "+i;
+      });
+      // set Table heigth
+      this.state.tableHeight = this.props.fulldata.length * 40 + "px";
+
+      // display first part of data
+      this.state.showndata = this.props.fulldata.slice(0, 30);
+
+      this.setState(this.state);
+    }
+
+    scroll(e) {
+      // scroll position
+      let newPosition = e.currentTarget.scrollTop;
+      
+      // index of massive
+      let index = Math.floor(newPosition / 40);
+      // scroll shift
+      let scrollTop = newPosition % 40;
+
+      // refresh data 
+      this.state.showndata = [];
+
+      let start = index;
+      let end = index + 30;
+      for (let i = start; i < end; i++) {
+        this.state.showndata.push(this.props.fulldata[i]);
+      }
+
+      this.container.style.paddingTop = index * 40 + "px";
+
+      this.container.scrollTop = scrollTop + this.container.style.paddingTop;
+      this.setState(this.state);
+    }
+
+
+    render() {
+
+        return (              
+            <div className="or__maintable" onScroll={this.scroll } style={{ width: "90%", maxHeight: "630px", overflow: "scroll",  border: "1px solid gray"}} id="mainTable1">
+                <div style={{width: "100%", height: this.state.tableHeight, overflow: "hidden"}}>
+                    <div style={{ width: "100%", overflow: "hidden"}} ref={container => this.container = container}>
+                        <table className="or__maintable-table" style={{ border: "1px solid gray", zIndex: "10", width: "100%"}} >
+                            <tbody>
+                                {
+                                   this.state.showndata.map((element, ind) => {
+                                        if (element) {
+                                          return (
+                                            <tr className="org-main__table-data" style={{ height: "30px" }}>
+                                                <td className = "org-main__table-data-cell" id = { "cell"+ind.toString()+"0" } style = {{ border: "1px solid gray", width: "20%" }}> {element.name} </td>
+                                                <td className = "org-main__table-data-cell" id = { "cell"+ind.toString()+"1" } style = {{ border: "1px solid gray", width: "20%" }}> {element.ceo + ind} </td>
+                                                <td className = "org-main__table-data-cell" id = { "cell"+ind.toString()+"2" } style = {{ border: "1px solid gray", width: "20%" }}> {+element.money + ind} <br/> {element.moneyFormat} </td>
+                                                <td className = "org-main__table-data-cell" id = { "cell"+ind.toString()+"3" } style = {{ border: "1px solid gray", width: "20%" }}> {+element.profit + ind} </td>
+                                                <td className = "org-main__table-data-cell" id = { "cell"+ind.toString()+"4" } style = {{ border: "1px solid gray", width: "20%" }}> {+element.result + ind} </td>
+                                            </tr>
+                                          );
+                                        }
+                                        return <tr className="org-main__table-data" style={{ height: "30px" }}></tr>
+                                      }                                  
+                                   ) 
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }   
+  render() {
+
+    return (
+      <div className="App">
+        <MainTable fulldata={searchMass}/>
+      </div>
+    );
+  }
+}
+
+  ReactDOM.render(<App/>, document.getElementById('container'));
+
+  </script>
+
+
+  </body>
+</html>
