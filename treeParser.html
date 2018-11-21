@@ -1,0 +1,55 @@
+<html>
+
+
+<body>
+
+<div id="id1"> 
+Some text
+
+</div>
+<button onClick=go()> go!</button>
+</body>
+</html>
+
+<script>
+
+ var data = [
+	{a1: 1, a2: 2, childs: [
+		{ a1: 12, a2: 13, childs: 
+			[ {a1: "test114", childs:[]}]}, 
+		{a1: 114, a2: 115, childs: 
+			[{a1:1116, a2: 1117, childs: []}]}
+		] 
+	},
+	{a1: 3, a2: 4, childs: [{a1: 22, a2: 23, childs: []}, {a1: 224, a2: 223, childs: [{a1:2221, a2: 2222, childs: []}]}] },
+	{a1: 5, a2: 6, childs: [{a1: 32, a2: 33, childs: []}] },
+	{a1: 7, a2: 8, childs: []}
+ ]
+
+var mass = [];
+var newarray = [];
+
+function go() {
+	console.log(treeWalker(data, mass, 1));
+}
+
+function treeWalker(obj, arr, level) {	
+	obj.forEach(function(item) {
+
+		if (Array.isArray(item)){
+			return;
+		}
+
+		arr.push({
+			new:item.a1, 
+			childs: (item.childs.length > 0) ? treeWalker(item.childs, [], level+1) : [], 
+			level: level
+		});	
+
+		return (item.childs.length > 0) ? treeWalker(item.childs, arr, level+1) : arr;
+	});
+
+	return  arr;
+}
+
+</script>
