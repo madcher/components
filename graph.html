@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+        <meta charset="UTF-8">
+        <script src="https://unpkg.com/react@15/dist/react.min.js"></script>
+        <script src="https://unpkg.com/react-dom@15/dist/react-dom.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.24.0/babel.js"></script>
+        <style>
+            .diag:hover {
+               fill: #eb8196;
+               fill-opacity: ".5"
+            }
+        </style>
+
+  </head>
+  <body>
+
+    <div id='root'></div>
+
+  <script type="text/babel">
+
+    function getSectorPath(x, y, diameter, a1, a2) {
+        const degtorad = Math.PI / 180;
+        const radius = diameter / 2;
+        const cr = radius - 5;
+        const cx1 = (Math.cos(degtorad * a2) * cr) + x;
+        const cy1 = (-Math.sin(degtorad * a2) * cr) + y;
+        const cx2 = (Math.cos(degtorad * a1) * cr) + x;
+        const cy2 = (-Math.sin(degtorad * a1) * cr) + y;
+
+        return "M" + x + " " + y + " " + cx1 + " " + cy1 + " A" + cr + " " + cr + " 0 0 1 " + cx2 + " " + cy2 + "Z";
+    }
+    
+    const outerDiameter = 230;
+
+
+    const Pie = React.createClass({
+        render () {
+            return (
+                <svg width={outerDiameter} height={outerDiameter}>
+                    <path className="diag" d={getSectorPath(outerDiameter / 2, outerDiameter / 2, outerDiameter, 15, 30)} fill="#81e4eb" stroke="white" strokeWidth="3"/>
+                    <path className="diag" d={getSectorPath(outerDiameter / 2, outerDiameter / 2, outerDiameter, 30, 146)} fill="#81ebb9" stroke="white" strokeWidth="3"/>
+                    <path className="diag" d={getSectorPath(outerDiameter / 2, outerDiameter / 2, outerDiameter, 146, 257)} fill="#81a2eb" stroke="white" strokeWidth="3"/>
+                    <path className="diag" d={getSectorPath(outerDiameter / 2, outerDiameter / 2, outerDiameter, 257, 15)} fill="#ebb981" stroke="white" strokeWidth="3"/>
+                    <path d={getSectorPath(outerDiameter / 2, outerDiameter / 2, outerDiameter / 2.5, 0, 180)} fill="white" stroke="white" strokeWidth="1"/>
+                    <path d={getSectorPath(outerDiameter / 2, outerDiameter / 2, outerDiameter / 2.5, 180, 0)} fill="white" stroke="white" strokeWidth="1"/>
+                </svg>
+            )
+        }
+    })
+
+    ReactDOM.render(
+        <Pie />,
+        document.getElementById('root')
+    )
+
+  </script>
+
+
+  </body>
+</html>
