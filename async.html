@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<div id='container'>
+
+</div>
+
+<script type="text/javascript">
+
+	var url = 'http://www.filltext.com/?rows=10&id={number|1000}&company={business}&lastName={lastName}&date={date}&invest={numberRange|100,10000}';
+
+	// ajax function
+	function download(url) {
+		return new Promise(function (resolve, reject) {
+			var request = new XMLHttpRequest();
+			request.open('GET', url, true);
+			request.addEventListener('load', function() {
+				if (request.status < 400) {
+					resolve(request.response);
+				} else {
+					reject('reject ' + request.status);
+				}
+			});
+			request.addEventListener('error', function() {
+				reject('network error');
+			});
+			request.send();
+		});
+	}
+
+	const makeRequest = async () => {
+		try {
+			let myData = JSON.parse(await download(url));
+			myData.forEach(el => {
+				document.getElementById('container').innerHTML += (el.company + '<br/>');
+			})
+		} catch (err) {
+			console.log(err);
+		}
+
+	}
+	makeRequest();
+	// ajax promise handler 
+
+
+
+
+</script>
+</body>
+</html>
+
+
