@@ -1,0 +1,50 @@
+html {
+	background-color: #333333;
+}
+
+:active, :hover, :focus {
+	outline: 0;
+   	outline-offset: 0;
+}
+
+.testContainer {
+	display: flex;
+	width: 500px;
+	margin: 0 auto;
+	color:#f7f7f7;
+	font-size: 1.8rem;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.block {
+	width: 500px;
+}
+
+.block__question {
+	font-size: 2rem;
+	text-align: center;
+	color:  #3d94eb;
+	padding: 1.4rem;
+}
+
+.block__answers {
+	padding-left: 100px;
+}
+
+.block__button {
+	text-align: center;
+}
+
+.button {
+	background: #1c88bf;
+	border: none;
+	font-size: 1.8rem;
+	color: white;
+	display: inline-block;
+	font-weight: 300;
+	line-height: 1;
+	padding: 1.2rem;
+	text-decoration: none;
+}
