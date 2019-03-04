@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="./css/style.css">
+  <title>test</title>
+</head>
+
+<body>
+
+<div id="test" class="testContainer">
+	<div id='question' class="block block__question">Question</div>
+	<div id='answers' class="block block__answers">
+		<form id="list">
+		</form>
+	</div>
+	<div id="info" class="block">&nbsp;
+	</div>
+	<div id='go' class="block block__button"> <button onclick="next()" class="button"> Ответить</button></div>
+</div>
+
+
+<script>
+	// вопросы
+	var questions = ["К какому виду затрат относятся ресурсы, которые расходуются исключительно на осуществление определенного вида деятельности или производство актива?", "К какому виду затрат относятся ресурсы, которые необходимы для поддержки деятельности или обеспечения производства актива, но которые также связаны с другими видами деятельности и активами?", "Что является первым этапом процесса оценки стоимости?", "К какому виду затрат относятся затраты на сырьё и основные материалы?", "Question5", "Вопрос 6", "Qestion7"];
+	// ответы
+	var answers = [["Прямые", "Накладные"], ["Целевые", "Прямые", "Накладные"], ["Ценообразование", "Калькуляция стоимости", "Качественное и количественное определение содержания"], ["Переменные", "Постоянные"],["answ1", "answ2", "answ3", "answ4", "answ5"],["answ1", "answ2", "answ3", "answ4", "answ5"],["answ1", "answ2", "answ3", "answ4", "answ5"]];
+	var pravln = [1, 3, 3, 1, [2,3], 1, [2,3] ]; //mass of rigth answers
+	var count = 0; //number of question
+	var newLi=""; //new answer element
+	var trueCount=0; //number of rigth answers
+	var testlen=7; //length of questions
+	var massChecked = [];
+	next();
+	var fal=[];
+	function next(){
+	var a1="question";
+	var a2="list";
+	var a3="answers";
+	//проверяем правильные ответы
+	if (count>0 && count<=testlen){
+	  var inp = document.getElementsByName('r');
+	  massChecked[count-1]=[];
+	  //счетчик выбранных ответов
+	  var inpCount=0;
+	  //проевряем выбран ли ответ
+	  for (var kk = 0; kk < inp.length; kk++) {
+	    if (inp[kk].checked){
+	      inpCount=1;
+	    }
+	  }
+	  //если ответ не выбран
+	  if (inpCount==0){
+	    alert("Пожалуйста, выберите ответ");
+	    return;
+	  }
+	  //закончили провеку
+	  for (var k = 0; k < inp.length; k++) {
+	    //если элемент радиокнопка и еслион нажат, то проверяем правильность выбора
+	    //поменять весь бло if на два. Один радио, другой чекбокс !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	    if (inp[k].type == "radio" && inp[k].checked) {
+	      //приводим к числовому значению
+	      if (+(inp[k].value)+1==pravln[count-1]){
+	        trueCount+=1;
+	      }
+	      else {
+	        //записываем номер неправильно отвеченного вопроса
+	        fal.push(count);
+	      }
+	    }
+	    if (inp[k].type == "checkbox" && inp[k].checked) {
+	      massChecked[count-1].push(+(inp[k].value)+1);
+	    }
+	  }
+	  //if test is end compare answers
+	  if(count==testlen){
+	    //console.log (massChecked);
+	    for (var t=0;t<pravln.length; t++){
+	      //compare answers
+	      //if questions not zero (many answers) compare answers
+	      if (massChecked[t]!=""){
+	        if(JSON.stringify(pravln[t])==JSON.stringify(massChecked[t])){
+	          trueCount+=1;
+	        }
+	        else{
+	          console.log(t);
+	          fal.push(t+1);
+	        }
+	      }
+	    }
+	  }
+	}
+	if (count<testlen){
+	  document.getElementById(a1).innerHTML=questions[count];
+	  document.getElementById(a2).innerHTML ="";
+	  for (var j =0; j < answers[count].length; j++){
+	    newLi = document.createElement('p');
+	    if (!pravln[count].length){
+	      newLi.innerHTML = '<input name="r" type="radio" value="'+j+'"> '+answers[count][j];
+	    }
+	    else{
+	      newLi.innerHTML = '<input name="r" type="checkbox" value="'+j+'"> '+answers[count][j];
+	    }
+	    //console.log(pravln[count].length);
+	    //поменять ттттттттттттттттттттттттттттттууууууууууууууууууууууууууууттттттттттттттттттттттттттттттттттттттт
+	    list.appendChild(newLi);
+	  }
+	}
+	else{
+	  var score =  trueCount;
+	  document.getElementById(a1).innerHTML="Тест завершен";
+	  document.getElementById(a3).innerHTML="Правильных ответов: " + trueCount;
+	  if (fal.length>0){
+	    document.getElementById(a3).innerHTML+="<br><br> <b>Неправильные отвеченные вопросы: </b>";
+	    for (var t=0; t<fal.length; t++){
+	      //fal[t] - номер неправильного вопроса, questions[fal[t]-1] - сам вопрос
+	      document.getElementById(a3).innerHTML+="<br> - "+questions[fal[t]-1];
+	    }        
+	  }
+	  document.getElementById("go").innerHTML="    <button onclick='go2()' style='width:100px; height: 40px; border: 1px solid black; border-radius: 3px'>Далее</button>" ;
+	}
+	count+=1;
+	}
+	function go2(){
+		alert("тест завершен");
+	}
+</script>
+
+
+
+</body>
+
+</html>
