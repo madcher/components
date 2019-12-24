@@ -1,3 +1,5 @@
+// https://codepen.io/madcher/pen/eYmRpwz?editors=0010
+
 // объект для котнтекста
 const themes = {
   light: {
