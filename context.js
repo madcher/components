@@ -1,5 +1,3 @@
-
-
 const ThemeContext = React.createContext('light');
 const HzContext = React.createContext('hz');
 
@@ -36,11 +34,10 @@ function Button(props) {
   return (
     
       <HzContext.Consumer>
-      {
-          value => <h1>helleo1 world {value} {props.theme}</h1>
-       }
-       </HzContext.Consumer>
-    
+        {
+            value => <h1>helleo1 world {value} {props.theme}</h1>
+        }
+      </HzContext.Consumer>
   );
 }
 
