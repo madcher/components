@@ -1,5 +1,3 @@
-// https://codepen.io/madcher/pen/eYmRpwz?editors=0010
-
 // объект для котнтекста
 const themes = {
   light: {
@@ -17,27 +15,35 @@ const ThemeContext = React.createContext(
   themes.dark // значение по умолчанию
 );
 
+// don't change context
+themes.dark = 'red';
+
 // компонент с контекстом
 class ThemedButton extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
-    let props = this.props;
     let theme = this.context;
+    console.log(' 1 ' + this.props.theme);
+    
     return (
-      <button
-        {...props}
+      <button 
+        onClick={this.props.click}
         style={{backgroundColor: theme.background}}
-      />
+      >
+        {this.props.children}
+      </button>
     );
   }
 }
 
 ThemedButton.contextType = ThemeContext;
 
-
 // Промежуточный компонент, который использует ThemedButton
 function Toolbar(props) {
   return (
-    <ThemedButton onClick={props.changeTheme}>
+    <ThemedButton click={props.changeTheme} theme={themes.dark}>
       Change Theme
     </ThemedButton>
   );
@@ -45,37 +51,36 @@ function Toolbar(props) {
 
 class App extends React.Component {
   constructor(props) {
-    super(props);
-    this.state = {
-      theme: themes.light,
-    };
-
-    this.toggleTheme = () => {
+      super(props);
+      this.toggleTheme = this.toggleTheme.bind(this);
+      this.state = {
+        theme: themes.light,
+      };
+  }
+  
+  toggleTheme() {
       this.setState(state => ({
         theme:
           state.theme === themes.dark
             ? themes.light
             : themes.dark,
       }));
-    };
   }
-
   render() {
-    // ThemedButton внутри ThemeProvider использует
-    // значение светлой UI-темы из состояния, в то время как
-    // ThemedButton, который находится вне ThemeProvider,
-    // использует тёмную UI-тему из значения по умолчанию
     return (
       <div>
         <ThemeContext.Provider value={this.state.theme}>
           <Toolbar changeTheme={this.toggleTheme} />
         </ThemeContext.Provider>
         <section>
-          <ThemedButton />
+          <ThemedButton>  
+            Исходный
+          </ThemedButton>
         </section>
-      </div>
+       </div>
     );
   }
 }
 
 ReactDOM.render(<App />, document.getElementById('container'));
+
